@@ -1,6 +1,6 @@
 # Mire
 
-It's a nonviolent MUD. (Multi-User Dungeon)
+It's a nonviolent MUD. (Multi-User Минотавр ДАНЖЕН МАСТЕР)
 
 ## Usage
 
