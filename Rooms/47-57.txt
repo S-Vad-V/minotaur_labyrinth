@@ -1,0 +1,2 @@
+{:desc "You are at someone's spawn point. You are in the tunnel. Two ways to go."
+ :exits {:north :46-57 :south :48-57 } }

@@ -1,0 +1,2 @@
+{:desc "You are in dead end. Only one way to go."
+ :exits {:south :12-49 } }
