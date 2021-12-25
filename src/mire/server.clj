@@ -34,7 +34,7 @@
               player/*inventory* (ref #{})
               player/*health* (ref 100)
               player/*damage* (ref 5)
-              player/*armor* (ref 10)]
+              player/*armor* (ref 0)]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
        (commute player/streams assoc player/*name* *out*))
