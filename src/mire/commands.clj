@@ -55,12 +55,17 @@
 		 	(println "You picked up the " thing ".")
 		 		(if (= thing "sword")
 		   		(do (print "Your damage now: ")
-		   		(ref-set player/*damage* (+ @player/*damage* 20)))
+		   		(ref-set player/*damage* (+ @player/*damage* 50)))
 			   		(if (= thing "tt")
 			   		(do (print "Your damage now: ")
-			   		(ref-set player/*damage* (+ @player/*damage* 50))))
-			   			
-			   			))
+			   		(ref-set player/*damage* (+ @player/*damage* 100)))
+			   			(if (= thing "potato")
+			   			(do (print "Your armor now: ")
+		   				(ref-set player/*armor* 50))
+				   			(if (= thing "glad")
+				   			(do (print "Your armor now: ")
+		   					(ref-set player/*armor* 100)))
+				   			))))
       			(str "You already have " thing ".")))
      	(str "There isn't any " thing " here."))))
 
@@ -87,9 +92,24 @@
   (str @player/*health*))
   
 (defn damage
-  "See your hp."
+  "See your damage."
   []
   (str @player/*damage*))
+
+(defn armor
+  "See your armor."
+  []
+  (str @player/*armor*))
+
+(defn info
+ "See all info"
+ []
+ (print "Your health is: ")
+ (println (str @player/*health*))
+ (print "Your armor is: ")
+ (println (str @player/*armor*))
+ (print "Your damage is: ")
+ (str @player/*damage*))
 
 (defn detect
   "If you have the detector, you can see which room an item is in."
@@ -134,7 +154,9 @@
                "say" say
                "help" help
                "health" health
-               "damage" damage})
+               "damage" damage
+               "armor" armor
+               "info" info})
 
 ;; Command handling
 
