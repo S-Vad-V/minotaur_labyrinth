@@ -53,10 +53,15 @@
 		        (:items @player/*current-room*)
 		         player/*inventory*)
 		 	(println "You picked up the " thing ".")
-		 	(if (= thing "sword")
-	   		(do (print "Your damage now: ")
-	   		(ref-set player/*damage* (+ @player/*damage* 20)))))
-      		(str "You already have " thing ".")))
+		 		(if (= thing "sword")
+		   		(do (print "Your damage now: ")
+		   		(ref-set player/*damage* (+ @player/*damage* 20)))
+			   		(if (= thing "tt")
+			   		(do (print "Your damage now: ")
+			   		(ref-set player/*damage* (+ @player/*damage* 50))))
+			   			
+			   			))
+      			(str "You already have " thing ".")))
      	(str "There isn't any " thing " here."))))
 
 (defn discard
