@@ -32,8 +32,8 @@
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref (@rooms/rooms :start))
               player/*inventory*  (ref #{:mantle :lighter :wall :penknife :sandals});(ref #{})
-              player/*health* (100)
-              player/*damage* 5]
+              player/*health* (ref 100)
+              player/*damage* (ref 5)]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
        (commute player/streams assoc player/*name* *out*)) ;player/players
@@ -42,10 +42,15 @@
 
       (try (loop [input (read-line)]
              (when input
-               (println (commands/execute input))
-               (.flush *err*)
-               (print player/prompt) (flush)
-               (recur (read-line))))
+               (if (<= @player/*health* 0)
+                 (do (println "You are dead!")(cleanup)
+                   (throw (Exception. "You are dead!")))
+                 (do (println (commands/execute input))
+                 (.flush *err*)
+                 (print player/prompt) (flush)
+                 (recur (read-line)))
+               )
+             ))
            (finally (cleanup))))))
 
 (defn -main
