@@ -14,12 +14,12 @@
 	[]
 	(let [direct (rand-int 4)]
 		(if (= direct 0)
-		(try (walk north))
+		(try (mire.minotaur/walk north))
 		(if (= direct 1)
-		(try (walk east))
+		(try (mire.minotaur/walk east) )
 		(if (= direct 2)
-		(try (walk south))
-		(try (walk west)))))))
+		(try (mire.minotaur/walk south))
+		(try (mire.minotaur/walk west)))))))
 
 (defn walk
   [direction]
