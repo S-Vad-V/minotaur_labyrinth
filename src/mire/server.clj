@@ -71,4 +71,4 @@
      (println "Launching Mire server on port" port))
   ([port] (-main port "resources/rooms"))
   ([] (-main 3333))
-  (do minos-rising))
+  (minos-rising))
