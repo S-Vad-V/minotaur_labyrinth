@@ -10,17 +10,6 @@
   (alter from disj obj)
   (alter to conj obj))
 
-(defn randMove
-	[]
-	(let [direct (rand-int 4)]
-		(if (= direct 0)
-		(try (mire.minotaur/walk north))
-		(if (= direct 1)
-		(try (mire.minotaur/walk east) )
-		(if (= direct 2)
-		(try (mire.minotaur/walk south))
-		(try (mire.minotaur/walk west)))))))
-
 (defn walk
   [direction]
   (dosync
@@ -36,6 +25,16 @@
          (ref-set minotaur/*current-room* target) 
        )))))
 
+(defn randMove
+	[]
+	(let [direct (rand-int 4)]
+		(if (= direct 0)
+		(try (walk north))
+		(if (= direct 1)
+		(try (walk east))
+		(if (= direct 2)
+		(try (walk south))
+		(try (walk west)))))))
 
 
 	
