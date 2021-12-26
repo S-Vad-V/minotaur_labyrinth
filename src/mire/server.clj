@@ -29,9 +29,10 @@
             *out* (io/writer out)
             *err* (io/writer System/err)]
     #_{:clj-kondo/ignore [:inline-def]}
-    (def spawnsList (spawns/add-spawns "/mnt/c/Users/kgeny/Desktop/minotaur_labyrinth/resources/spawn/"))
+    (def spawnsList (spawns/add-spawns "resources/spawn/"))
     #_{:clj-kondo/ignore [:inline-def]}
     (def strt (get spawnsList (rand-nth (keys spawnsList))))
+    (println strt)
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref strt)
