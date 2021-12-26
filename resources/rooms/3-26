@@ -1,2 +1,3 @@
 {:desc "You are in the tunnel. Two ways to go."
- :exits {:east :3-27 :west :3-25} }
+ :exits {:east :3-27 :west :3-25} 
+ :items #{:sword}}

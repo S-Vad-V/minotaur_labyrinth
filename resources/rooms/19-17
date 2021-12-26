@@ -1,2 +1,3 @@
 {:desc "You are against the wall in the room. Three ways to go."
- :exits {:east :19-18 :south :20-17 :west :19-16} }
+ :exits {:east :19-18 :south :20-17 :west :19-16} 
+ :items #{:potato}}

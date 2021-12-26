@@ -9,6 +9,10 @@
   (alter from disj obj)
   (alter to conj obj))
 
+(defn- del-from-ref
+  [obj from]
+  (alter from disj obj))
+
 ;; Command functions
 
 (defn look
@@ -288,12 +292,42 @@
   "Pick something up."
   [thing]
   (dosync
-   (if (rooms/room-contains? @player/*current-room* thing)
-     (do (move-between-refs (keyword thing)
-                            (:items @player/*current-room*)
-                            player/*inventory*)
-         (str "You picked up the " thing "."))
-     (str "There isn't any " thing " here."))))
+  	(if (rooms/room-contains? @player/*current-room* thing)
+  		(if (= thing "heal")
+          		(do (del-from-ref (keyword thing)
+                       (:items @player/*current-room*))
+              		(print "You healed. Your HP: ")
+	     		(ref-set player/*health* 100))
+	   	(if (not(player/carrying? thing))
+	     		(do (move-between-refs (keyword thing)
+		        (:items @player/*current-room*)
+		         player/*inventory*)
+		 	(println "You picked up the " thing ".")
+		 		(if (= thing "sword")
+		   		(do (print "Your damage now: ")
+		   		(ref-set player/*damage* (+ @player/*damage* 50)))
+			   		(if (= thing "tt")
+			   		(do (print "Your damage now: ")
+			   		(ref-set player/*damage* (+ @player/*damage* 100)))
+			   			(if (= thing "potato")
+			   			(if (not(player/carrying? "glad"))
+			   			(do (print "Your armor now: ")
+		   				(ref-set player/*armor* 50))
+		   					(do (move-between-refs (keyword thing)
+		   					player/*inventory*
+							(:items @player/*current-room*))
+		   					(str "You can not wear 2 armors at the same time. You dropped " thing ".")))
+					   			(if (= thing "glad")
+					   			(if (not(player/carrying? "potato"))
+					   			(do (print "Your armor now: ")
+				   				(ref-set player/*armor* 100))
+				   					(do (move-between-refs (keyword thing)
+				   					player/*inventory*
+									(:items @player/*current-room*))
+				   					(str "You can not wear 2 armors at the same time. You dropped " thing ".")))
+					   				)))))
+      			(str "You already have " thing ".")))
+     	(str "There isn't any " thing " here."))))
 
 (defn discard
   "Put something down that you're carrying."
@@ -303,7 +337,24 @@
      (do (move-between-refs (keyword thing)
                             player/*inventory*
                             (:items @player/*current-room*))
-         (str "You dropped the " thing "."))
+         (str "You dropped the " thing ".")
+         (if (= thing "sword")
+         (do (print "Your damage now: ")
+      	 (ref-set player/*damage* (- @player/*damage* 50)))
+         	(if (= thing "tt")
+         	(do (print "Your damage now: ")
+      	 	(ref-set player/*damage* (- @player/*damage* 100)))
+         		(if (= thing "potato")
+		 	(do (del-from-ref (keyword thing)
+                       (:items @player/*current-room*))
+		 	(print "Your armor now: ")
+	      	 	(ref-set player/*armor* 0))
+		 		(if (= thing "glad")
+			 	(do (del-from-ref (keyword thing)
+                       	(:items @player/*current-room*))
+			 	(print "Your armor now: ")
+		      	 	(ref-set player/*armor* 0))
+         			)))))
      (str "You're not carrying a " thing "."))))
 
 (defn inventory
@@ -316,20 +367,30 @@
 ;set_damage
 
 (defn health
-  "See your health."
+  "See your hp."
   []
-  (str "Your health:\n"
-       (str/join "\n" (str @player/*health*))))
+  (str @player/*health*))
 
-(defn detect
-  "If you have the detector, you can see which room an item is in."
-  [item]
-  (if (@player/*inventory* :detector)
-    (if-let [room (first (filter #((:items %) (keyword item))
-                                 (vals @rooms/rooms)))]
-      (str item " is in " (:name room))
-      (str item " is not in any room."))
-    "You need to be carrying the detector for that."))
+(defn damage
+  "See your damage."
+  []
+  (str @player/*damage*))
+
+(defn armor
+  "See your armor."
+  []
+  (str @player/*armor*))
+
+(defn info
+ "See all info"
+ []
+ (print "Your health is: ")
+ (println (str @player/*health*))
+ (print "Your armor is: ")
+ (println (str @player/*armor*))
+ (print "Your damage is: ")
+ (str @player/*damage*))
+
 
 (defn say
   "Say something out loud so everyone in the room can hear."
@@ -361,7 +422,9 @@
                "discard" discard
                "inventory" inventory
                "health" health
-               "detect" detect
+               "damage" damage
+               "armor" armor
+               "info" info
                "look" look
                "say" say
                ;"fight" fight

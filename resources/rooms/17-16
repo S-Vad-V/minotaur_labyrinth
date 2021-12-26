@@ -1,2 +1,3 @@
 {:desc "You are in the corner of the room. Two ways to go."
- :exits {:north :16-16 :east :17-17 } }
+ :exits {:north :16-16 :east :17-17 } 
+ :items #{:glad}}

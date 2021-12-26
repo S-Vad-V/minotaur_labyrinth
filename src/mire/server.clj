@@ -32,10 +32,11 @@
     ;; the one above so *in* and *out* will be bound to the socket
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
-              player/*current-room* (ref (@rooms/rooms :start))
-              player/*inventory*  (ref #{:mantle :lighter :wall :penknife :sandals});(ref #{})
+              player/*current-room* (ref (@rooms/rooms :3-24))
+              player/*inventory*  (ref #{});(ref #{})
               player/*health* (ref 100)
-              player/*damage* (ref 5)]
+              player/*damage* (ref 5)
+              player/*armor* (ref 10)]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
        (commute player/streams assoc player/*name* *out*)) ;player/players

@@ -6,6 +6,7 @@
 (def ^:dynamic *damage*)
 (def ^:dynamic *name*)
 (def ^:dynamic *command*)
+(def ^:dynamic *armor*)
 
 (def prompt "> ")
 (def streams (ref {}))

@@ -1,2 +1,3 @@
 {:desc "You are at the exit from the room. Several ways to go."
- :exits {:north :6-16 :south :8-16 :west :7-15} }
+ :exits {:north :6-16 :south :8-16 :west :7-15} 
+ :items #{:heal}}
