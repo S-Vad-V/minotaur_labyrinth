@@ -1,0 +1,3 @@
+{:desc "You are against the wall in the room. Three ways to go."
+ :exits {:east :13-24 :south :14-23 :west :13-22} 
+ :items #{:sword}}
