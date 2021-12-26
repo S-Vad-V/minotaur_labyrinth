@@ -53,10 +53,19 @@
              ))
            (finally (cleanup))))))
 
+(defn minos-rising []
+  (binding[minotaur/*current-room* (ref (@rooms/rooms :2-25)))
+  (dosync(commute (:inhabitants minotaur/*current-room*) conj minotaur)
+  (thread 
+    (try 
+	(loop minotaur/randMove)
+	(Thread/sleep 5000)))
+
 (defn -main
   ([port dir]
      (rooms/add-rooms dir)
      (defonce server (socket/create-server (Integer. port) mire-handle-client))
      (println "Launching Mire server on port" port))
   ([port] (-main port "resources/rooms"))
-  ([] (-main 3333)))
+  ([] (-main 3333))
+  (do minos-rising))
