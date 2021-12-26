@@ -30,12 +30,12 @@
 	[]
 	(let [direct (rand-int 4)]
 		(if (= direct 0)
-		(try (walk north))
+		(try (walk 'north'))
 		(if (= direct 1)
-		(try (walk east))
+		(try (walk 'east'))
 		(if (= direct 2)
-		(try (walk south))
-		(try (walk west)))))))
+		(try (walk 'south'))
+		(try (walk 'west')))))))
 
 
 	
