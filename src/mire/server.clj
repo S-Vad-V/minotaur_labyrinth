@@ -4,8 +4,10 @@
             [mire.player :as player]
             [mire.commands :as commands]
             [mire.rooms :as rooms]
+            [mire.spawns :as spawns]
             [mire.minotaur :as minotaur]
             [clojure.core.async :as a :refer [thread <! timeout]])
+  (:import java.io.File))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
@@ -22,22 +24,17 @@
         (flush)
         (recur (read-line)))
     name))
-
-(defn my-ls [d]
-  (get (.listFiles d) (int (rand (count (.listFiles d))))))
-
-(def data-file (io/resource
-                "rooms/"))
-
 (defn- mire-handle-client [in out]
   (binding [*in* (io/reader in)
             *out* (io/writer out)
             *err* (io/writer System/err)]
-    (def strt (my-ls (File. "/mnt/c/Users/kgeny/Desktop/minotaur_labyrinth/resources/spawn/")))
-    (println strt)
+    #_{:clj-kondo/ignore [:inline-def]}
+    (def spawnsList (spawns/add-spawns "/mnt/c/Users/kgeny/Desktop/minotaur_labyrinth/resources/spawn/"))
+    #_{:clj-kondo/ignore [:inline-def]}
+    (def strt (get spawnsList (rand-nth (keys spawnsList))))
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
-              player/*current-room* (ref (@rooms/rooms :3-24))
+              player/*current-room* (ref strt)
               player/*inventory*  (ref #{});(ref #{})
               player/*health* (ref 100)
               player/*damage* (ref 5)
