@@ -5,7 +5,7 @@
             [mire.commands :as commands]
             [mire.rooms :as rooms]
 			[mire.minotaur :as minotaur]
-			[clojure.core.async :as a))
+			[clojure.core.async :as a]))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
@@ -59,10 +59,10 @@
   (binding[minotaur/*current-room* (ref (@rooms/rooms :2-24))
 		   minotaur/*name* (ref 'Minos')]
   (dosync(commute (:inhabitants @minotaur/*current-room*) conj minotaur/*name*))
-  (a.thread 
+  (a/thread 
     (try 
 	(loop minotaur/randMove)
-	(a.<! (timeout 5000))))))
+	(a/<! (timeout 5000))))))
 
 (defn -main
   ([port dir]
