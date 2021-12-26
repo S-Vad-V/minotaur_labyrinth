@@ -1,0 +1,2 @@
+{:desc "You are at the crossroads. Several ways to go."
+ :exits {:north :11-49 :south :13-49 :west :12-48} }
