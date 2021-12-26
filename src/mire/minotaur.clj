@@ -3,6 +3,7 @@
 			  [mire.player :as player]))
 
 (def ^:dynamic *current-room*)
+(def ^:dynamic *name*)
 
 (defn- move-between-refs
   "Move one instance of obj between from and to. Must call in a transaction."
@@ -13,16 +14,16 @@
 (defn walk
   [direction]
   (dosync
-   (let [target-name ((:exits @minotaur/*current-room*) (keyword direction))
+   (let [target-name ((:exits @*current-room*) (keyword direction))
          target (@rooms/rooms target-name)]
      (if target
        (do
 		 (let [victim ((:inhabitants target))])
 		 (ref-set victim/*health* 0)
-         (move-between-refs minotaur
-                            (:inhabitants @minotaur/*current-room*)
+         (move-between-refs *name*
+                            (:inhabitants @*current-room*)
                             (:inhabitants target))
-         (ref-set minotaur/*current-room* target) 
+         (ref-set *current-room* target) 
        )))))
 
 (defn randMove
