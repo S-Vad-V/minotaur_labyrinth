@@ -1,2 +1,2 @@
-{:desc "You are against the wall in the room. Three ways to go."
- :exits {:east :27-13 :south :28-12 :west :27-11} }
+{:desc "You are in the Safe Zone! Congratulations, you are winner!"
+ :exits {:north :26-12 } }

@@ -1,2 +1,0 @@
-{:desc "You are in the Safe Zone! Congratulations, you are winner!"
- :exits {:north :32-29 :east :33-30 :south :34-29 :west :33-28} }
