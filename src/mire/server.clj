@@ -68,7 +68,8 @@
   ([port dir]
      (rooms/add-rooms dir)
      (defonce server (socket/create-server (Integer. port) mire-handle-client))
-     (println "Launching Mire server on port" port))
+     (println "Launching Mire server on port" port)
+	 (minos-rising))
   ([port] (-main port "resources/rooms"))
   ([] (-main 3333))
-  ([] (minos-rising)))
+  )
