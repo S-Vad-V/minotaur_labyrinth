@@ -48,7 +48,7 @@
            (finally (cleanup))))))
 
 (defn minos-rising []
-  (binding[minotaur/*current-room* (ref (@rooms/rooms :1-26)))
+  (binding[minotaur/*current-room* (ref (@rooms/rooms :2-25)))
   (dosync(commute (:inhabitants minotaur/*current-room*) conj minotaur)
   (thread 
     (try 
