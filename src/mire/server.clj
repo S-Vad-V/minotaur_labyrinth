@@ -54,12 +54,12 @@
            (finally (cleanup))))))
 
 (defn minos-rising []
-  (binding[minotaur/*current-room* (ref (@rooms/rooms :2-25)))
+  (binding[minotaur/*current-room* (ref (@rooms/rooms :2-25))])
   (dosync(commute (:inhabitants minotaur/*current-room*) conj minotaur)
   (thread 
     (try 
 	(loop minotaur/randMove)
-	(Thread/sleep 5000)))
+	(Thread/sleep 5000)))))
 
 (defn -main
   ([port dir]
