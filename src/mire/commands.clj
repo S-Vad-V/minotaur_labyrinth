@@ -338,22 +338,22 @@
                             player/*inventory*
                             (:items @player/*current-room*))
          (str "You dropped the " thing ".")
-         (if (= thing "sword") 
+         (if (= thing "sword")
          (do (print "Your damage now: ")
       	 (ref-set player/*damage* (- @player/*damage* 50)))
-         	(if (= thing "tt") 
+         	(if (= thing "tt")
          	(do (print "Your damage now: ")
       	 	(ref-set player/*damage* (- @player/*damage* 100)))
-         		(if (= thing "potato") 
+         		(if (= thing "potato")
 		 	(do (del-from-ref (keyword thing)
                        (:items @player/*current-room*))
 		 	(print "Your armor now: ")
 	      	 	(ref-set player/*armor* 0))
-		 		(if (= thing "glad") 
+		 		(if (= thing "glad")
 			 	(do (del-from-ref (keyword thing)
                        	(:items @player/*current-room*))
 			 	(print "Your armor now: ")
-		      	 	(ref-set player/*armor* 0))	      	 	
+		      	 	(ref-set player/*armor* 0))
          			)))))
      (str "You're not carrying a " thing "."))))
 
@@ -370,7 +370,7 @@
   "See your hp."
   []
   (str @player/*health*))
-  
+
 (defn damage
   "See your damage."
   []
