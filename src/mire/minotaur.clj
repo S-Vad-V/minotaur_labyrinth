@@ -18,8 +18,8 @@
          target (@rooms/rooms target-name)]
      (if target
        (do
-		 (let [victim ((:inhabitants target))])
-		 (ref-set victim/*health* 0)
+		 (let [victim ((:inhabitants target))]
+		 (ref-set victim/*health* 0))
          (move-between-refs *name*
                             (:inhabitants @*current-room*)
                             (:inhabitants target))
