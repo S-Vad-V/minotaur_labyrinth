@@ -19,7 +19,7 @@
      (if target
        (do
 		 (let [victim ((:inhabitants target))]
-		 (ref-set victim/*health* 0))
+		 (cond (= victim @player/*name*) (ref-set @player/*health* 0)))
          (move-between-refs *name*
                             (:inhabitants @*current-room*)
                             (:inhabitants target))
