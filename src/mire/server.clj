@@ -5,7 +5,7 @@
             [mire.commands :as commands]
             [mire.rooms :as rooms]
 			[mire.minotaur :as minotaur]
-			[clojure.core.async :as a :refer [thread <!]]))
+			[clojure.core.async :as a :refer [thread <! timeout]]))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
