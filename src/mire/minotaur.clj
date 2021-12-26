@@ -14,12 +14,12 @@
 	[]
 	(let [direct (rand-int 4)]
 		(if (= direct 0)
-		(try (move north))
+		(try (minotaur/move north))
 		(if (= direct 1)
-		(try (move east))
+		(try (minotaur/move east))
 		(if (= direct 2)
-		(try (move south))
-		(try (move west)))))))
+		(try (minotaur/move south))
+		(try (minotaur/move west)))))))
 
 (defn move
   [direction]
