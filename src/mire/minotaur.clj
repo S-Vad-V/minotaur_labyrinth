@@ -14,14 +14,14 @@
 	[]
 	(let [direct (rand-int 4)]
 		(if (= direct 0)
-		(try (minotaur/move north))
+		(try (walk north))
 		(if (= direct 1)
-		(try (minotaur/move east))
+		(try (walk east))
 		(if (= direct 2)
-		(try (minotaur/move south))
-		(try (minotaur/move west)))))))
+		(try (walk south))
+		(try (walk west)))))))
 
-(defn move
+(defn walk
   [direction]
   (dosync
    (let [target-name ((:exits @minotaur/*current-room*) (keyword direction))
