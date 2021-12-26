@@ -57,11 +57,11 @@
 (defn minos-rising []
   (binding[minotaur/*current-room* (ref (@rooms/rooms :2-24))
 		   minotaur/*name* (ref 'Minos')]
-  (dosync(commute (:inhabitants minotaur/*current-room*) conj minotaur)
+  (dosync(commute (:inhabitants @minotaur/*current-room*) conj minotaur))
   (thread 
     (try 
 	(loop minotaur/randMove)
-	(Thread/sleep 5000))))))
+	(Thread/sleep 5000)))))
 
 (defn -main
   ([port dir]
