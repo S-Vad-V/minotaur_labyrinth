@@ -3,7 +3,8 @@
             [server.socket :as socket]
             [mire.player :as player]
             [mire.commands :as commands]
-            [mire.rooms :as rooms]))
+            [mire.rooms :as rooms]
+			[mire.minotaur :as minos]))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
@@ -30,7 +31,7 @@
     ;; the one above so *in* and *out* will be bound to the socket
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
-              player/*current-room* (ref (@rooms/rooms :start))
+              player/*current-room* (ref (@rooms/rooms :1-25))
               player/*inventory* (ref #{})]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
@@ -46,10 +47,20 @@
                (recur (read-line))))
            (finally (cleanup))))))
 
+(defn minos-rising []
+  (binding[minotaur/*current-room* (ref (@rooms/rooms :1-26)))
+  (dosync(commute (:inhabitants minotaur/*current-room*) conj minotaur)
+  (thread 
+    (try 
+	(loop minotaur/randMove)
+	(Thread/sleep 5000)))
+
 (defn -main
   ([port dir]
      (rooms/add-rooms dir)
      (defonce server (socket/create-server (Integer. port) mire-handle-client))
      (println "Launching Mire server on port" port))
   ([port] (-main port "resources/rooms"))
-  ([] (-main 3333)))
+  ([] (-main 3333))
+  (do minos-rising)
+  )
