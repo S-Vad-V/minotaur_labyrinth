@@ -1,2 +1,2 @@
-{:desc "You are in the Safe Zone! Congratulations, you are winner!"
+{:desc "You are in the Safe Zone! Congratulations, you are wier!"
  :exits {:south :2-12 } }
