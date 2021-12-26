@@ -1,2 +1,2 @@
 {:desc "You are in the tunnel. Two ways to go."
- :exits {} }
+ :exits {:east :7-34 :west :7-32} }
