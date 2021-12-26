@@ -3,8 +3,7 @@
             [server.socket :as socket]
             [mire.player :as player]
             [mire.commands :as commands]
-            [mire.rooms :as rooms]
-			[mire.minotaur :as minos]))
+            [mire.rooms :as rooms]))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
@@ -31,29 +30,28 @@
     ;; the one above so *in* and *out* will be bound to the socket
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
-              player/*current-room* (ref (@rooms/rooms :1-25))
-              player/*inventory* (ref #{})]
+              player/*current-room* (ref (@rooms/rooms :start))
+              player/*inventory*  (ref #{:mantle :lighter :wall :penknife :sandals});(ref #{})
+              player/*health* (ref 100)
+              player/*damage* (ref 5)]
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
-       (commute player/streams assoc player/*name* *out*))
+       (commute player/streams assoc player/*name* *out*)) ;player/players
 
       (println (commands/look)) (print player/prompt) (flush)
 
       (try (loop [input (read-line)]
              (when input
-               (println (commands/execute input))
-               (.flush *err*)
-               (print player/prompt) (flush)
-               (recur (read-line))))
+               (if (<= @player/*health* 0)
+                 (do (println "You are dead!")(cleanup)
+                   (throw (Exception. "You are dead!")))
+                 (do (println (commands/execute input))
+                 (.flush *err*)
+                 (print player/prompt) (flush)
+                 (recur (read-line)))
+               )
+             ))
            (finally (cleanup))))))
-
-(defn minos-rising []
-  (binding[minotaur/*current-room* (ref (@rooms/rooms :1-26)))
-  (dosync(commute (:inhabitants minotaur/*current-room*) conj minotaur)
-  (thread 
-    (try 
-	(loop minotaur/randMove)
-	(Thread/sleep 5000)))
 
 (defn -main
   ([port dir]
@@ -61,6 +59,4 @@
      (defonce server (socket/create-server (Integer. port) mire-handle-client))
      (println "Launching Mire server on port" port))
   ([port] (-main port "resources/rooms"))
-  ([] (-main 3333))
-  (do minos-rising)
-  )
+  ([] (-main 3333)))

@@ -30,3 +30,7 @@
 (defn room-contains?
   [room thing]
   (@(:items room) (keyword thing)))
+
+(defn room-inhabitant
+  [room]
+  (@(:inhabitants room)))
