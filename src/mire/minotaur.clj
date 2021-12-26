@@ -11,6 +11,7 @@
   (alter to conj obj))
 
 (defn randMove
+	[]
 	(let [direct (rand-int 4)]
 		(if (= direct 0)
 		(try (move north))
