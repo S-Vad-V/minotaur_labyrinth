@@ -2,13 +2,15 @@
 
 (def ^:dynamic *current-room*)
 (def ^:dynamic *inventory*)
-(def ^:dynamic *name*)
 (def ^:dynamic *health*)
 (def ^:dynamic *damage*)
+(def ^:dynamic *name*)
+(def ^:dynamic *command*)
 (def ^:dynamic *armor*)
 
 (def prompt "> ")
 (def streams (ref {}))
+(def players (ref {}))
 
 (defn carrying? [thing]
   (some #{(keyword thing)} @*inventory*))
