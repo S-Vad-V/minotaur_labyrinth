@@ -1,5 +1,5 @@
 (ns mire.minotaur
-	(:require [Rooms :as rooms]
+	(:require [mire.rooms :as rooms]
 			  [mire.player :as player]))
 
 (def ^:dynamic *current-room*)

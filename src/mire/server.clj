@@ -4,7 +4,7 @@
             [mire.player :as player]
             [mire.commands :as commands]
             [mire.rooms :as rooms]
-			[mire.minotaur :as minotaur))
+			[mire.minotaur :as minotaur]))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
@@ -55,7 +55,7 @@
            (finally (cleanup))))))
 
 (defn minos-rising []
-  (binding[minotaur/*current-room* (ref (@rooms/rooms :2-25))])
+  (binding[minotaur/*current-room* (ref (@rooms/rooms :2-24))])
   (dosync(commute (:inhabitants minotaur/*current-room*) conj minotaur)
   (thread 
     (try 
