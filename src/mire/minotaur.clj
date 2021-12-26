@@ -10,32 +10,30 @@
   (alter from disj obj)
   (alter to conj obj))
 
-(defn move
-	(let [arr1 (keys @(:exits @minotaur/*current-room*))
-		  arr2 (keys @(:exits @rooms/rooms arr1))
-		  arr3 (keys @(:exits @rooms/rooms arr2))
-		  pl1  (:inhabitants arr1)
-		  pl2  (:inhabitants arr2)
-		  pl3  (:inhabitants arr3)]
-		(if pl1
-			(do (move-between-refs minotaur
-                            (:inhabitants *current-room*)
-                            (:inhabitants pl1))
-				(dosync
-				(comment Нужна функция смерти игрока, пока только удаляем из комнаты)
-				(commute (:inhabitants pl1) disj player/*name*)))
-		 (if pl2
-			(do (move-between-refs minotaur
-                            (:inhabitants *current-room*)
-                            (:inhabitants pl2))
-				(dosync
-				(comment Нужна функция смерти игрока, пока только удаляем из комнаты)
-				(commute (:inhabitants pl1) disj player/*name*))))
-		 (if pl3
-			(do (move-between-refs minotaur
-							(:inhabitants *current-room*)
-							(:inhabitants pl2)))))))
+(defn randMove
+	(let [direct (rand-int 4)]
+		(if direct == 0
+		(do (move north))
+		(if direct == 1
+		(do (move east))
+		(if direct == 2
+		(do (move south))
+		(do (move west)))))))
 
+(defn move
+  "\"♬ We gotta get out of this place... ♪\" Give a direction."
+  [direction]
+  (dosync
+   (let [target-name ((:exits @minotaur/*current-room*) (keyword direction))
+         target (@rooms/rooms target-name)]
+     (if target
+       (do
+         (move-between-refs minotaur
+                            (:inhabitants @minotaur/*current-room*)
+                            (:inhabitants target))
+         (ref-set minotaur/*current-room* target)
+         )
+       "You can't go that way."))))
 
 
 
