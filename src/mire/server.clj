@@ -6,7 +6,6 @@
             [mire.rooms :as rooms]
             [mire.minotaur :as minotaur]
             [clojure.core.async :as a :refer [thread <! timeout]])
-  (:import java.io.File))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
@@ -38,10 +37,11 @@
     (println strt)
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
-              player/*current-room* (ref strt)
-              player/*inventory*  (ref #{:mantle :lighter :wall :penknife :sandals});(ref #{})
+              player/*current-room* (ref (@rooms/rooms :3-24))
+              player/*inventory*  (ref #{});(ref #{})
               player/*health* (ref 100)
-              player/*damage* (ref 5)]
+              player/*damage* (ref 5)
+              player/*armor* (ref 10)]
       ;; (println @player/*current-room*)
       (dosync
        (commute (:inhabitants @player/*current-room*) conj player/*name*)
