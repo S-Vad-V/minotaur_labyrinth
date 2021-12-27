@@ -29,9 +29,19 @@ filter_codes([H|T1], [F|T2]) :-
   filter_codes(T1, T2).
 
 
+
+list_member(X,[X|_]).
+list_member(X,[_|TAIL]) :- list_member(X,TAIL).
+
 process(Stream) :-
-  exit([Direction|_]),
-  format(atom(Command), 'move ~w~n', [Direction]),
+  exit(Exits),
+  if(list_member(north, Exits),
+    (format(atom(Command), 'move ~w~n', "north")),
+    if(list_member(west, Exits),
+        (format(atom(Command), 'move ~w~n', "west")),
+        (exit([Direction,_], format(atom(Command), 'move ~w~n', [Direction])))
+        )
+    )
   write(Command),
   write(Stream, Command),
   flush_output(Stream),
