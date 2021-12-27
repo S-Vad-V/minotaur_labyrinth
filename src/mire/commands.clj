@@ -45,7 +45,7 @@
     (if (and (and exitn exite) (and exitw exitso))
       (do
         (str
-         (:desc @player/*current-room*) "Ways from current cell: " (keys @(:exits @player/*current-room*)) "\n"
+         (:desc @player/*current-room*) "Ways from current room: " (keys @(:exits @player/*current-room*)) "\n"
          (str/join "\n" (map #(str " There is " % " here.\n") @(:items @player/*current-room*)))
          (str/join "\n" (map #(str "There is players " % " here.\n")  @(:inhabitants @player/*current-room*)))
          "\nExits from north way: " (keys @(:exits targetn))

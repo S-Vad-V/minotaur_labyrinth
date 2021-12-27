@@ -18,16 +18,25 @@ parse(_).
 
 filter([],[]).
 
-filter([H1,H2,H3,H4|T],T2):-
+filter([H1,H2,H3,H4,H5|T],T2):-
     char_code(C1,H1),
     char_code(C2,H2),
     char_code(C3,H3),
     char_code(C4,H4),
+    char_code(C5,H5),
+    (
     member(C1,['c']),
     member(C2,['e']),
     member(C3,['l']),
-    member(C4,['l']) ->
-    filter2(T,T2),!;filter([H2,H3,H4|T],T2).
+    member(C4,['l']),
+    member(C5,[':']); 
+    member(C1,['r']),
+    member(C2,['o']),
+    member(C3,['o']),
+    member(C4,['m']),
+    member(C5,[':'])
+    ) ->
+    filter2(T,T2),!;filter([H2,H3,H4, H5|T],T2).
 
 filter2([H,H1|T],[H|T]):-
     char_code(C,H1),
@@ -52,18 +61,19 @@ list_member(X,[_|TAIL]) :- list_member(X,TAIL).
 
 process(Stream) :-
   exit(Exits),
-  if(list_member(west, Exits),
+  if(member(west, Exits),
     (format(atom(Command), 'move ~w~n', "west")),
-    if(list_member(north, Exits),
-        (format(atom(Command), 'move ~w~n', "north")),
-        (exit([Direction,_], format(atom(Command), 'move ~w~n', [Direction])))
-        )
+      (if(member(north, Exits),
+          format(atom(Command), 'move ~w~n', "north"),
+          (if(member(east, Exits), 
+            format(atom(Command), 'move ~w~n', "east"),
+            (format(atom(Command), 'move ~w~n', "south")))))
+      )
     ),
   write(Command),
   write(Stream, Command),
   flush_output(Stream),
   retractall(exit(_)).
-
 process(_).
 
 
@@ -76,9 +86,7 @@ startLoop(Stream) :-
 
 loop(Stream) :-
   read_line_to_codes(Stream, Codes),  
-  write(Codes),
   filter(Codes, Exits),  
-  write(Exits),
   filter_codes(Exits, Filtered),
   write(Filtered),
   atom_codes(Atom, Filtered),
