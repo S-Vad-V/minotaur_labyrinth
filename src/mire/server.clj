@@ -24,26 +24,27 @@
         (flush)
         (recur (read-line)))
     name))
+
 (defn- mire-handle-client [in out]
-  (binding [in (io/reader in)
-            out (io/writer out)
-            err (io/writer System/err)]
-    #{:clj-kondo/ignore [:inline-def]}
+  (binding [*in* (io/reader in)
+            *out* (io/writer out)
+            *err* (io/writer System/err)]
+    #_{:clj-kondo/ignore [:inline-def]}
     (def spawnsList (spawns/add-spawns "resources/spawn/"))
-    #{:clj-kondo/ignore [:inline-def]}
+    #_{:clj-kondo/ignore [:inline-def]}
     (def strt (get spawnsList (rand-nth (keys spawnsList))))
     ;; (println strt)
     (print "\nWhat is your name? ") (flush)
-    (binding [player/name (get-unique-player-name (read-line))
-              player/current-room (ref strt)
-              player/inventory  (ref #{});(ref #{})
-              player/health (ref 100)
-              player/damage (ref 5)
-              player/armor (ref 10)]
-      ;; (println @player/current-room)
+    (binding [player/*name* (get-unique-player-name (read-line))
+              player/*current-room* (ref strt)
+              player/*inventory*  (ref #{});(ref #{})
+              player/*health* (ref 100)
+              player/*damage* (ref 5)
+              player/*armor* (ref 10)]
+      ;; (println @player/*current-room*)
       (dosync
-       (commute (:inhabitants @player/current-room) conj player/name)
-       (commute player/streams assoc player/name out)) ;player/players
+       (commute (:inhabitants @player/*current-room*) conj player/*name*)
+       (commute player/streams assoc player/*name* *out*)) ;player/players
 
       (println (commands/look)) (print player/prompt) (flush)
 
@@ -52,11 +53,11 @@
                (if (= input "exit")
                  (do (println "You are leave! Goodbye!") (cleanup)
                      (throw (Exception. "You are leave! Goodbye!")))
-               (if (<= @player/health 0)
+               (if (<= @player/*health* 0)
                  (do (println "You are dead!") (cleanup)
                      (throw (Exception. "You are dead!")))
                  (do (println (commands/execute input))
-                     (.flush err)
+                     (.flush *err*)
                      (print player/prompt) (flush)
                      (recur (read-line)))))))
            (finally (cleanup))))))
