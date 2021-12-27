@@ -59,7 +59,7 @@
                      (.flush err)
                      (print player/prompt) (flush)
                      (recur (read-line)))))))
-           (finally (cleanup)))))
+           (finally (cleanup))))))
 
 (defn- minos-rising []
   (def spawnsminoList (mSpawns/add-mSpawn "resources/minotaur_spawn/"))
