@@ -18,18 +18,16 @@ parse(_).
 
 filter([],[]).
 
-filter([H1,H2,H3,H4,H5|T],T2):-
+filter([H1,H2,H3,H4|T],T2):-
     char_code(C1,H1),
     char_code(C2,H2),
     char_code(C3,H3),
     char_code(C4,H4),
-    char_code(C5,H5),
     member(C1,['c']),
     member(C2,['e']),
     member(C3,['l']),
     member(C4,['l']),
-    member(C5,['s']),
-    filter2(T,T2),true;filter([H2,H3,H4,H5|T],T2),true.
+    filter2(T,T2),true;filter([H2,H3,H4|T],T2),true.
 
 filter2([H,H1|T],[H|T]):-
     char_code(C,H1),
@@ -78,6 +76,7 @@ startLoop(Stream) :-
 
 loop(Stream) :-
   read_line_to_codes(Stream, Codes),
+  write(Codes),
   filter(Codes, Exits),  
   write(Exits),
   filter_codes(Exits, Filtered),
