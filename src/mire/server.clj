@@ -68,7 +68,7 @@
   (def spawnsminoList (spawnmino/add-spawnmino "resources/minotaur_spawn/"))
 #_{:clj-kondo/ignore [:inline-def]}
 (def strt (get spawnsminoList (rand-nth (keys spawnsminoList))))
-  (binding [minotaur/*current-room* (ref (strt)
+  (binding [minotaur/*current-room* (ref strt)
             minotaur/*name* (ref 'Minos')]
     (dosync (commute (:inhabitants @minotaur/*current-room*) conj minotaur/*name*))
     (thread
