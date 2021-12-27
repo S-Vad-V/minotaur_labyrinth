@@ -53,7 +53,7 @@
                (if (= input "exit")
                  (do (println "You are leave! Goodbye!") (cleanup)
                      (throw (Exception. "You are leave! Goodbye!")))
-               (if (<= @player/*health* 0)
+               (if (<= (peek @player/*health*) 0)
                  (do (println "You are dead!") (cleanup)
                      (throw (Exception. "You are dead!")))
                  (do (println (commands/execute input))
