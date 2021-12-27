@@ -272,17 +272,15 @@
          (look))
        "You can't go that way."))))
 
-;!!
-;(defn fight
-;  "Fight with another player"
-;  [player]
-;  (dosync
-;   (if (rooms/room-contains? @player/*current-room* thing)
-;     (do (move-between-refs (keyword thing)
-;                            (:items @player/*current-room*)
-;                            player/*inventory*)
-;         (str "You picked up the " thing "."))
-;     (str "There isn't any " thing " here."))))
+(defn fight
+[]
+(doseq [inhabitant
+(disj @(:inhabitants @player/*current-room*)
+player/*name*)]
+(binding [*out* (player/streams inhabitant)]
+(println (str " You have been damaged. Your health has dropped."))
+(println player/prompt)))
+(str "You hit another player " ))
 
 (defn grab
   "Pick something up."
@@ -406,7 +404,7 @@
                "detect" detect
                "look" look
                "say" say
-               ;"fight" fight
+               "fight" fight
                "help" help})
 
 ;; Command handling
