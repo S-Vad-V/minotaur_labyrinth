@@ -61,7 +61,6 @@
                      (print player/prompt) (flush)
                      (recur (read-line)))))))
            (finally (cleanup))))))
-
 (defn- minos-rising []
   (def spawnsminoList (mSpawns/add-mSpawn "resources/minotaur_spawn/"))
 #_{:clj-kondo/ignore [:inline-def]}
@@ -72,7 +71,6 @@
     (thread
       (try
         (while true minotaur/randMove)))))
-
 (defn -main
   ([port dir]
    (rooms/add-rooms dir)
