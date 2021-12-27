@@ -5,9 +5,9 @@
             [mire.commands :as commands]
             [mire.rooms :as rooms]
             [mire.spawns :as spawns]
+            [mire.spawnmino :as spawnmino]
             [mire.minotaur :as minotaur]
-            [clojure.core.async :as a :refer [thread <! timeout]])
-  (:import java.io.File))
+            [clojure.core.async :as a :refer [thread <! timeout]]))
 
 (defn- cleanup []
   "Drop all inventory and remove player from room and player list."
@@ -49,6 +49,12 @@
 
       (try (loop [input (read-line)]
              (when input
+               (if (= input "exit")
+                 (do (println "You are leave! Goodbye!") (cleanup)
+                     (throw (Exception. "You are leave! Goodbye!")))
+                 (do (println (commands/execute input))
+                     (.flush *err*)
+                     (print player/prompt) (flush)))
                (if (<= @player/*health* 0)
                  (do (println "You are dead!") (cleanup)
                      (throw (Exception. "You are dead!")))
@@ -59,7 +65,10 @@
            (finally (cleanup))))))
 
 (defn- minos-rising []
-  (binding [minotaur/*current-room* (ref (@rooms/rooms :2-24))
+  (def spawnsminoList (spawnmino/add-spawnmino "resources/minotaur_spawn/"))
+#_{:clj-kondo/ignore [:inline-def]}
+(def strt (get spawnsminoList (rand-nth (keys spawnsminoList))))
+  (binding [minotaur/*current-room* (ref strt)
             minotaur/*name* (ref 'Minos')]
     (dosync (commute (:inhabitants @minotaur/*current-room*) conj minotaur/*name*))
     (thread
