@@ -24,6 +24,7 @@
         (flush)
         (recur (read-line)))
     name))
+
 (defn- mire-handle-client [in out]
   (binding [*in* (io/reader in)
             *out* (io/writer out)
@@ -32,7 +33,7 @@
     (def spawnsList (spawns/add-spawns "resources/spawn/"))
     #_{:clj-kondo/ignore [:inline-def]}
     (def strt (get spawnsList (rand-nth (keys spawnsList))))
-    (println strt)
+    ;; (println strt)
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref strt)
@@ -52,16 +53,13 @@
                (if (= input "exit")
                  (do (println "You are leave! Goodbye!") (cleanup)
                      (throw (Exception. "You are leave! Goodbye!")))
-                 (do (println (commands/execute input))
-                     (.flush *err*)
-                     (print player/prompt) (flush)))
                (if (<= @player/*health* 0)
                  (do (println "You are dead!") (cleanup)
                      (throw (Exception. "You are dead!")))
                  (do (println (commands/execute input))
                      (.flush *err*)
                      (print player/prompt) (flush)
-                     (recur (read-line))))))
+                     (recur (read-line)))))))
            (finally (cleanup))))))
 
 (defn- minos-rising []
