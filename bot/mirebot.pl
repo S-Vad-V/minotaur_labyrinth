@@ -41,7 +41,7 @@ process(Stream) :-
         (format(atom(Command), 'move ~w~n', "west")),
         (exit([Direction,_], format(atom(Command), 'move ~w~n', [Direction])))
         )
-    )
+    ),
   write(Command),
   write(Stream, Command),
   flush_output(Stream),
@@ -49,8 +49,17 @@ process(Stream) :-
 
 process(_).
 
+
+startLoop(Stream) :-
+  flush(),
+  sleep(1),
+  writeln(Stream, 'Vad Bot'),
+  flush_output(Stream),
+  loop(Stream).
+
 loop(Stream) :-
   read_line_to_codes(Stream, Codes),
+  write(Codes),
   filter_codes(Codes, Filtered),
   atom_codes(Atom, Filtered),
   tokenize_atom(Atom, Tokens),
@@ -65,6 +74,6 @@ loop(Stream) :-
  main :-
    setup_call_cleanup(
      tcp_connect(localhost:3333, Stream, []),
-     loop(Stream),
+     startLoop(Stream),
      close(Stream)).
      

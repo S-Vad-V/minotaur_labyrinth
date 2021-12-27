@@ -32,7 +32,7 @@
     (def spawnsList (spawns/add-spawns "resources/spawn/"))
     #_{:clj-kondo/ignore [:inline-def]}
     (def strt (get spawnsList (rand-nth (keys spawnsList))))
-    (println strt)
+    ;; (println strt)
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref strt)
@@ -72,6 +72,6 @@
    (rooms/add-rooms dir)
    (defonce server (socket/create-server (Integer. port) mire-handle-client))
    (println "Launching Mire server on port" port)
-   (try minos-rising))
+   (minos-rising))
   ([port] (-main port "resources/rooms"))
   ([] (-main 3333)))
