@@ -5,7 +5,7 @@
             [mire.commands :as commands]
             [mire.rooms :as rooms]
             [mire.spawns :as spawns]
-            [mire.spawnmino :as spawnmino]
+            [mire.mSpawns :as mSpawns]
             [mire.minotaur :as minotaur]
             [clojure.core.async :as a :refer [thread <! timeout]]))
 
@@ -65,7 +65,7 @@
            (finally (cleanup))))))
 
 (defn- minos-rising []
-  (def spawnsminoList (spawnmino/add-spawnmino "resources/minotaur_spawn/"))
+  (def spawnsminoList (mSpawns/add-mSpawn "resources/minotaur_spawn/"))
 #_{:clj-kondo/ignore [:inline-def]}
 (def strt (get spawnsminoList (rand-nth (keys spawnsminoList))))
   (binding [minotaur/*current-room* (ref strt)
@@ -74,7 +74,8 @@
     (thread
       (try
         (while true minotaur/randMove
-               (<! (timeout 5000)))))))
+              ;;  (<! (timeout 5000))
+               )))))
 
 (defn -main
   ([port dir]
