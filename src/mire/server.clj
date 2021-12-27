@@ -38,7 +38,7 @@
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref strt)
               player/*inventory*  (ref #{});(ref #{})
-              player/*health* (ref 100)
+              player/*health* (ref [100])
               player/*damage* (ref 5)
               player/*armor* (ref 10)]
       ;; (println @player/*current-room*)
