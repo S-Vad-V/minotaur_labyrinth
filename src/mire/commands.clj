@@ -29,7 +29,7 @@
   "Get a description of the surrounding environs and its contents."
   []
 ;;   (Thread/sleep 5000)
-  
+
   (let [exitn ((:exits @player/*current-room*) (keyword "north"))
         exite ((:exits @player/*current-room*) (keyword "east"))
         exitw ((:exits @player/*current-room*) (keyword "west"))
@@ -256,17 +256,15 @@
          (look))
        "You can't go that way."))))
 
-;!!
-;(defn fight
-;  "Fight with another player"
-;  [player]
-;  (dosync
-;   (if (rooms/room-contains? @player/*current-room* thing)
-;     (do (move-between-refs (keyword thing)
-;                            (:items @player/*current-room*)
-;                            player/*inventory*)
-;         (str "You picked up the " thing "."))
-;     (str "There isn't any " thing " here."))))
+(defn fight
+[]
+(doseq [inhabitant
+(disj @(:inhabitants @player/*current-room*)
+player/*name*)]
+(binding [*out* (player/streams inhabitant)]
+(println (str " You have been damaged. Your health has dropped."))
+(println player/prompt)))
+(str "You hit another player " ))
 
 (defn grab
   "Pick something up."
@@ -372,16 +370,58 @@
  (str @player/*damage*))
 
 
+
 (defn say
-  "Say something out loud so everyone in the room can hear."
+  "Say something out loud and maybe someone will hear you."
   [& words]
-  (let [message (str/join " " words)]
-    (doseq [inhabitant (disj @(:inhabitants @player/*current-room*)
-                             player/*name*)]
+
+  (let 			[
+  					message (str/join " " words)
+
+  					exitn ((:exits @player/*current-room*) (keyword "north"))
+  					exite ((:exits @player/*current-room*) (keyword "east"))
+  					exitw ((:exits @player/*current-room*) (keyword "west"))
+  					exitso ((:exits @player/*current-room*) (keyword "south"))
+
+  				  	targetn(@rooms/rooms exitn)
+  					targete(@rooms/rooms exite)
+  					targetw(@rooms/rooms exitw)
+  					targetso(@rooms/rooms exitso)
+  			]
+
+     (do (if exitn
+     (doseq [inhabitant (disj @(:inhabitants targetn) player/*name*)]
       (binding [*out* (player/streams inhabitant)]
-        (println message)
+        (println player/*name* " says from south: " message " " player/prompt)
+        (println player/prompt)))   )
+
+     (do (if exite
+     (doseq [inhabitant (disj @(:inhabitants targete) player/*name*)]
+      (binding [*out* (player/streams inhabitant)]
+        (println player/*name* " says from west: " message " " player/prompt)
+        (println player/prompt)))   )
+
+     (do (if exitw
+     (doseq [inhabitant (disj @(:inhabitants targetw) player/*name*)]
+      (binding [*out* (player/streams inhabitant)]
+        (println player/*name* " says from east: " message " " player/prompt)
+        (println player/prompt)))   )
+
+     (do (if exitso
+     (doseq [inhabitant (disj @(:inhabitants targetso) player/*name*)]
+      (binding [*out* (player/streams inhabitant)]
+        (println player/*name* " says from north: " message " " player/prompt)
+        (println player/prompt)))   )
+
+
+     (doseq [inhabitant (disj @(:inhabitants @player/*current-room*) player/*name*)]
+      (binding [*out* (player/streams inhabitant)]
+        (println player/*name* " says : " message " " player/prompt)
         (println player/prompt)))
-    (str "You said " message)))
+    ))))
+
+    (str "You said: " message)
+    ))
 
 
 (defn help
@@ -419,8 +459,8 @@
                "info" info
                "look" look
                "say" say
+               "fight" fight
          	     "exit" exit
-               ;"fight" fight
                "help" help})
 
 ;; Command handling
