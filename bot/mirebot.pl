@@ -16,6 +16,27 @@ parse(Tokens) :- phrase(parse_exits(Exits), Tokens, Rest), retractall(exit(_)), 
 
 parse(_).
 
+filter([],[]).
+
+filter([H1,H2,H3,H4,H5|T],T2):-
+    char_code(C1,H1),
+    char_code(C2,H2),
+    char_code(C3,H3),
+    char_code(C4,H4),
+    char_code(C5,H5),
+    member(C1,['c']),
+    member(C2,['e']),
+    member(C3,['l']),
+    member(C4,['l']),
+    member(C5,['s']),
+    filter2(T,T2),true;filter([H2,H3,H4,H5|T],T2),true.
+
+filter2([H,H1|T],[H|T]):-
+    char_code(C,H1),
+    member(C,[')']),
+    T is [],true;
+    filter2([H1|T],T).
+
 /* Convert to lower case if necessary,
 skips some characters,
 works with non latin characters in SWI Prolog. */
@@ -28,17 +49,15 @@ filter_codes([H|T1], [F|T2]) :-
   code_type(F, to_lower(H)),
   filter_codes(T1, T2).
 
-
-
 list_member(X,[X|_]).
 list_member(X,[_|TAIL]) :- list_member(X,TAIL).
 
 process(Stream) :-
   exit(Exits),
-  if(list_member(north, Exits),
-    (format(atom(Command), 'move ~w~n', "north")),
-    if(list_member(west, Exits),
-        (format(atom(Command), 'move ~w~n', "west")),
+  if(list_member(west, Exits),
+    (format(atom(Command), 'move ~w~n', "west")),
+    if(list_member(north, Exits),
+        (format(atom(Command), 'move ~w~n', "north")),
         (exit([Direction,_], format(atom(Command), 'move ~w~n', [Direction])))
         )
     ),
@@ -59,8 +78,9 @@ startLoop(Stream) :-
 
 loop(Stream) :-
   read_line_to_codes(Stream, Codes),
-  write(Codes),
-  filter_codes(Codes, Filtered),
+  filter(Codes, Exits),  
+  write(Exits),
+  filter_codes(Exits, Filtered),
   atom_codes(Atom, Filtered),
   tokenize_atom(Atom, Tokens),
   write(Tokens),

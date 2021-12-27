@@ -32,7 +32,7 @@
     (def spawnsList (spawns/add-spawns "resources/spawn/"))
     #_{:clj-kondo/ignore [:inline-def]}
     (def strt (get spawnsList (rand-nth (keys spawnsList))))
-    ;; (println strt)
+    (println strt)
     (print "\nWhat is your name? ") (flush)
     (binding [player/*name* (get-unique-player-name (read-line))
               player/*current-room* (ref strt)
@@ -73,9 +73,7 @@
     (dosync (commute (:inhabitants @minotaur/*current-room*) conj minotaur/*name*))
     (thread
       (try
-        (while true minotaur/randMove
-              ;;  (<! (timeout 5000))
-               )))))
+        (while true minotaur/randMove)))))
 
 (defn -main
   ([port dir]

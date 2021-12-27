@@ -41,7 +41,7 @@
         targetw (@rooms/rooms exitw)
         targetso (@rooms/rooms exitso)]
 
-    (if (= (:desc @player/*current-room*) "You are in the Safe Zone! Congratulations, you are winner!") ((Thread/sleep 5000) (System/exit 0)))
+    (if (= (:desc @player/*current-room*) "You are in the Safe Zone! Congratulations, you are winner!") ((println(:desc @player/*current-room*)) (Thread/sleep 5000) (System/exit 0)))
 
     (if (and (and exitn exite) (and exitw exitso))
       (do
