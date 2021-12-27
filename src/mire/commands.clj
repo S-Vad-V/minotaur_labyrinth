@@ -273,14 +273,19 @@
        "You can't go that way."))))
 
 (defn fight
-[]
-(doseq [inhabitant
-(disj @(:inhabitants @player/*current-room*)
-player/*name*)]
-(binding [*out* (player/streams inhabitant)]
-(println (str " You have been damaged. Your health has dropped."))
-(println player/prompt)))
-(str "You hit another player " ))
+  []
+    (doseq [inhabitant
+     (disj @(:inhabitants @player/*current-room*)
+                             player/*name*)]
+      (binding [*out* (player/streams inhabitant)]
+      (println (str " You have been damaged. Your health has dropped."))
+      (dosync
+(def t (- (peek @player/*health*) @player/*damage*))
+(alter player/*health* conj t  ))
+(println(str "Your health " (peek @player/*health*)))
+        )
+        )
+    (str "You hit another player " ))
 
 (defn grab
   "Pick something up."
