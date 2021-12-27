@@ -35,7 +35,6 @@
         exitw ((:exits @player/*current-room*) (keyword "west"))
         exitso ((:exits @player/*current-room*) (keyword "south"))
 
-
         targetn (@rooms/rooms exitn)
         targete (@rooms/rooms exite)
         targetw (@rooms/rooms exitw)
@@ -77,7 +76,6 @@
                                                                                   @(:items targete))) (str/join "\n" (map #(str " There is players " % " here.\n")  @(:inhabitants targete)))
            "\nExits from west: " (keys @(:exits targetw)) (str/join "\n" (map #(str "There is " % " here.\n")
                                                                               @(:items targetw))) (str/join "\n" (map #(str " There is players " % " here.\n")  @(:inhabitants targetw)))))
-
 
         (if (and (and exitn exite)  exitso)
           (do
@@ -238,9 +236,6 @@
 
 )
   
-
-
-
 (defn move
   "\"♬ We gotta get out of this place... ♪\" Give a direction."
   [direction]
@@ -375,8 +370,6 @@
  (println (str @player/*armor*))
  (print "Your damage is: ")
  (str @player/*damage*))
-
-
 
 (defn say
   "Say something out loud and maybe someone will hear you."
