@@ -283,11 +283,27 @@
 		         player/*inventory*)
 		 	(println "You picked up the " thing ".")
 		 		(if (= thing "sword")
-		   		(do (print "Your damage now: ")
-		   		(ref-set player/*damage* (+ @player/*damage* 50)))
+		   		(do (print "You can not wear 2 armors at the same time. Your damage now: ")
+           (ref-set player/*damage* 50)
+           (if (player/carrying? :tt)
+             (do
+               (print "You can not wear 2 armors at the same time. You dropped the tt.")
+               (del-from-ref (keyword :tt)
+                             (:items @player/*current-room*))
+               )
+             nil
+             )
+           )
 			   		(if (= thing "tt")
 			   		(do (print "Your damage now: ")
-			   		(ref-set player/*damage* (+ @player/*damage* 100)))
+			   		(ref-set player/*damage* 100)
+           (if (player/carrying? :sword)
+             (do
+               (print "You dropped the sword")
+               (del-from-ref (keyword :sword)
+                             (:items @player/*current-room*)))
+             nil)
+            )
 			   			(if (= thing "potato")
 			   			(if (not(player/carrying? "glad"))
 			   			(do (print "Your armor now: ")
@@ -316,26 +332,35 @@
      (do (move-between-refs (keyword thing)
                             player/*inventory*
                             (:items @player/*current-room*))
-         (str "You dropped the " thing ".")
-         (if (= thing "sword")
-         (do (print "Your damage now: ")
-      	 (ref-set player/*damage* (- @player/*damage* 50)))
-         	(if (= thing "tt")
-         	(do (print "Your damage now: ")
-      	 	(ref-set player/*damage* (- @player/*damage* 100)))
-         		(if (= thing "potato")
-		 	(do (del-from-ref (keyword thing)
-                       (:items @player/*current-room*))
-		 	(print "Your armor now: ")
-	      	 	(ref-set player/*armor* 0))
-		 		(if (= thing "glad")
-			 	(do (del-from-ref (keyword thing)
-                       	(:items @player/*current-room*))
-			 	(print "Your armor now: ")
-		      	 	(ref-set player/*armor* 0))
-         			)))))
-     (str "You're not carrying a " thing "."))))
+         
+          (del-from-ref (keyword thing)
+                        (:items @player/*current-room*))
+         
+         (print "You dropped the " thing ".")
 
+         (if 
+          (or (= thing "tt") (= thing "sword"))
+           (do 
+             (print "Your damage now: ")
+             (ref-set player/*damage* 5)
+           ) 
+           nil
+         )
+
+         (if 
+          (or (= thing "potato") (= thing "glad"))
+           (do
+             (print "Your armor now: " )
+             (ref-set
+              player/*armor*
+              (if (and (> (int @player/*armor*) 10) (< (int @player/*armor*) 51)) 10 (int @player/*armor*))))
+           nil
+           )
+         ) 
+     (str "You're not carrying a " thing "."))
+     )
+  )
+(< 1 2)
 (defn inventory
   "See what you've got."
   []
